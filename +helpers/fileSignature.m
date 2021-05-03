@@ -19,6 +19,7 @@ signature = '';
 
 for i = 1:nargin
   f_info = dir(varargin{i});
-  signature = strcat(signature,sprintf('%s;%s;', f_info.name, f_info.date));
+  folder = regexp(f_info.folder,filesep,'split');
+  signature = strcat(signature,sprintf('%s;%s;%s;', f_info.name, folder{end}, f_info.date));
 end
 

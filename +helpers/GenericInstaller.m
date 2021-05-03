@@ -267,7 +267,7 @@ classdef GenericInstaller < handle
       if ~exist('flags','var'), flags = ''; end;
       curDir = pwd;
       [mexDir mexFile mexExt] = fileparts(mexFile);
-      mexCmd = sprintf('mex %s %s -O', [mexFile mexExt], flags);
+      mexCmd = sprintf('mex -compatibleArrayDims %s %s -O', [mexFile mexExt], flags);
       fprintf('Compiling: %s\n',mexCmd);
       cd(mexDir);
       try
