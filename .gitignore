@@ -11,3 +11,4 @@ junk/
 results/
 doc/html/*
 doc/demo/*
+*.asv

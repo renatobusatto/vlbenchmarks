@@ -106,6 +106,7 @@ namesFeat{1} = 'SIFT-Affine SQI';
 namesFeat{2} = 'SIFT SQI';
 namesFeat{3} = 'MSER-Affine SQI';
 excludeFigs = [6 9];
-plotResults(resultsPath,prefix,namesFeat,excludeFigs);
+ylimit = [25 0 4 0];
+plotResults(resultsPath,prefix,namesFeat,excludeFigs,ylimit);
 
 end

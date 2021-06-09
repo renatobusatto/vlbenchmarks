@@ -32,7 +32,12 @@ classdef AFrankHouseDataset < datasets.GenericTransfDataset & helpers.Logger...
 
   properties (Constant)
     % All dataset categories
-    AllCategories = {'orig-bw', 'orig-rgb', 'orig-sqi', 'sieve-bw', 'sieve-rgb', 'sieve-sqi'};
+    AllCategories = {...
+      'orig-bw', 'orig-rgb', 'orig-sqi', ...
+      'sieve-bw', 'sieve-rgb', 'sieve-sqi', ...
+      'sievehigh-bw', 'sievehigh-rgb', 'sievehigh-sqi', ...
+      'sieveband-bw', 'sieveband-rgb', 'sieveband-sqi', ...
+    };
     AllMeshes = [1, 10, 100, 1000, 10000, 100000];
   end
 
@@ -40,23 +45,9 @@ classdef AFrankHouseDataset < datasets.GenericTransfDataset & helpers.Logger...
     % Installation directory
     RootInstallDir = fullfile('data','datasets','AFrankHouseDataset');
     % Names of the image transformations in particular categories
-    CategoryImageNames = {...
-      'Image',... % orig-bw
-      'Image',... % orig-rgb
-      'Image',... % orig-sqi
-      'Image',... % sieve-bw
-      'Image',... % sieve-rgb
-      'Image',... % sieve-sqi
-      };
+    ImageNamesLabel = 'Image';
     % Image labels for particular categories (degree of transf.)
-    CategoryImageLabels = {...
-      0:22,... % orig-bw
-      0:22,... % orig-rgb
-      0:22,... % orig-sqi
-      0:22,... % sieve-bw
-      0:22,... % sieve-rgb
-      0:22,... % sieve-sqi
-      };
+    ImageNames = 0:22;
     % Root url for dataset tarballs
     RootUrl = 'http://renatobusatto.me/dataset/afrankhouse.tar.gz';
   end
@@ -92,8 +83,6 @@ classdef AFrankHouseDataset < datasets.GenericTransfDataset & helpers.Logger...
       obj.ListImages = obj.Info.imgs(strcmp(obj.Info.imgs.category,obj.Category),:);
       obj.ImgExt = obj.Info.category{obj.CategoryLong,'ext'};
       obj.checkInstall(varargin);
-      obj.ImageNames = obj.CategoryImageLabels{loc};
-      obj.ImageNamesLabel = obj.CategoryImageNames{loc};
     end
 
     function imgPath = getImagePath(obj,imgNo)

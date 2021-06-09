@@ -102,6 +102,7 @@ namesFeat{1} = 'SIFT-Affine';
 namesFeat{2} = 'SIFT';
 namesFeat{3} = 'MSER-Affine';
 excludeFigs = [6 9];
-plotResults(resultsPath,prefix,namesFeat,excludeFigs);
+ylimit = [25 0 5 0];
+plotResults(resultsPath,prefix,namesFeat,excludeFigs,ylimit);
 
 end
