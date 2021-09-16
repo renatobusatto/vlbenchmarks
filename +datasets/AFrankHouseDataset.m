@@ -44,10 +44,6 @@ classdef AFrankHouseDataset < datasets.GenericTransfDataset & helpers.Logger...
   properties (Constant, Hidden)
     % Installation directory
     RootInstallDir = fullfile('data','datasets','AFrankHouseDataset');
-    % Names of the image transformations in particular categories
-    ImageNamesLabel = 'Image';
-    % Image labels for particular categories (degree of transf.)
-    ImageNames = 0:22;
     % Root url for dataset tarballs
     RootUrl = 'http://renatobusatto.me/dataset/afrankhouse.tar.gz';
   end
@@ -56,6 +52,12 @@ classdef AFrankHouseDataset < datasets.GenericTransfDataset & helpers.Logger...
     function obj = AFrankHouseDataset(varargin)
       import datasets.*;
       import helpers.*;
+      
+      % Names of the image transformations in particular categories
+      ImageNamesLabel = 'Image';
+      % Image labels for particular categories (degree of transf.)
+      ImageNames = 0:22;
+    
       opts.Category = obj.Category;
       opts.Mesh = obj.Mesh;
       [opts, varargin] = vl_argparse(opts,varargin);

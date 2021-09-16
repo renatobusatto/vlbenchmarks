@@ -35,7 +35,7 @@ function plotFrameMatches(bestMatches,reprojFrames,varargin)
 
 % AUTORIGHTS
 
-refImMatchedStyle = {'Color',[0.1 0.1 0.9],'LineWidth',2};
+refImMatchedStyle = {'Color',[0.9 0.1 0.9],'LineWidth',2};
 refImUnmatchedStyle = {'Color',[0.2 0.2 0.5],'LineWidth',1};
 testImMatchedStyle = {'Color',[0.1 0.9 0.1],'LineWidth',2};
 testImUnmatchedStyle = {'Color',[0.2 0.5 0.2],'LineWidth',1};

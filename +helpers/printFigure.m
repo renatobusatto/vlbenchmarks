@@ -27,8 +27,8 @@ if ~exist('ext','var')
   ext = 'eps';
 end
 filePath = fullfile(path, [fileName '.' ext]) ;
-extArgs = containers.Map({'eps','png','jpeg','jpg','ps'},...
-  {'-depsc2','-dpng','-djpeg90','-djpeg90','-dpsc2'});
+extArgs = containers.Map({'eps','png','jpeg','jpg','ps','pdf'},...
+  {'-depsc2','-dpng','-djpeg90','-djpeg90','-dpsc2','-dpdf'});
 
 print(gcf,extArgs(ext),filePath) ;
 fprintf('%s: wrote file ''%s''\n', mfilename,  filePath) ;

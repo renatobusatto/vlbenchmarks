@@ -1,16 +1,14 @@
-function repeatabilityAFrankHouse(resultsPath)
+function repeatabilityAFrankHouse(Sieve,Type)
 % REPEATABILITYDEMO Demonstrates how to run the repatability benchmark
 %   REPEATABILITYDEMO() Runs the repeatability demo.
 %
 %   REPEATABILITYDEMO(RESULTS_PATH) Run the demo and save the results to
 %   path RESULTS_PATH.
 
-% Created by: Renato Busatto
+% Adapted by: Renato Busatto
 % Original authors: Karel Lenc and Andrea Vedaldi
 
 % AUTORIGHTS
-
-if nargin < 1, resultsPath = ''; end;
 
 import datasets.*;
 import benchmarks.*;
@@ -23,13 +21,15 @@ import localFeatures.*;
 % A detector repeatability is measured against a benchmark. In this
 % case we create instances of the Anne Frank House dataset.
 
+Category = [Sieve '-' Type];
+
 datasets = {...
-    AFrankHouseDataset('Category','orig-bw'),...
-    AFrankHouseDataset('Category','sieve-bw','Mesh',10^1),...
-    AFrankHouseDataset('Category','sieve-bw','Mesh',10^2),...
-    AFrankHouseDataset('Category','sieve-bw','Mesh',10^3),...
-    AFrankHouseDataset('Category','sieve-bw','Mesh',10^4),...
-    AFrankHouseDataset('Category','sieve-bw','Mesh',10^5)
+    AFrankHouseDataset('Category',['orig-' Type]),...
+    AFrankHouseDataset('Category',Category,'Mesh',10^1),...
+    AFrankHouseDataset('Category',Category,'Mesh',10^2),...
+    AFrankHouseDataset('Category',Category,'Mesh',10^3),...
+    AFrankHouseDataset('Category',Category,'Mesh',10^4),...
+    AFrankHouseDataset('Category',Category,'Mesh',10^5)
 };
 
 % Next, the benchmark is intialised by choosing various
@@ -80,29 +80,46 @@ for ds = 1:numel(datasets)
         namesFeat{f} = featExtractors{f}.Name;
         for i = 2:datasets{ds}.NumImages
             if isnan(datasets{ds}.getTransformation(i)), continue; end
-            [repeatability(ds,f,i), numCorresp(ds,f,i)] = ...
-                repBenchmark.testFeatureExtractor(featExtractors{f}, ...
-                                    datasets{ds}.getTransformation(i), ...
-                                    datasets{ds}.getImagePath(1), ...
-                                    datasets{ds}.getImagePath(i));
-            [matchScore(ds,f,i), numMatches(ds,f,i)] = ...
-                matBenchmark.testFeatureExtractor(featExtractors{f}, ...
-                                    datasets{ds}.getTransformation(i), ...
-                                    datasets{ds}.getImagePath(1), ...
-                                    datasets{ds}.getImagePath(i));
+            try
+                [repeatability(ds,f,i), numCorresp(ds,f,i)] = ...
+                    repBenchmark.testFeatureExtractor(featExtractors{f}, ...
+                                        datasets{ds}.getTransformation(i), ...
+                                        datasets{ds}.getImagePath(1), ...
+                                        datasets{ds}.getImagePath(i));
+                [matchScore(ds,f,i), numMatches(ds,f,i)] = ...
+                    matBenchmark.testFeatureExtractor(featExtractors{f}, ...
+                                        datasets{ds}.getTransformation(i), ...
+                                        datasets{ds}.getImagePath(1), ...
+                                        datasets{ds}.getImagePath(i));
+            catch
+                fprintf('Inconsistent data in iteration ds=%i,f=%i,i=%i. Skipped.\n',ds,f,i);
+            end
         end
     end
 end
 
-save('result.mat','repeatability','numCorresp','datasets','featExtractors','namesDataset','namesFeat','repBenchmark','matchScore','numMatches','-v7.3');
-
 resultsPath = 'results/';
-prefix = 'afrank';
-namesFeat{1} = 'SIFT-Affine';
-namesFeat{2} = 'SIFT';
-namesFeat{3} = 'MSER-Affine';
+prefix = ['afrank-' Category];
+
+if strcmpi(Type,'sqi')
+    namesFeat{1} = 'SIFT-Affine SQI';
+    namesFeat{2} = 'SIFT SQI';
+    namesFeat{3} = 'MSER-Affine SQI';
+else
+    namesFeat{1} = 'SIFT-Affine';
+    namesFeat{2} = 'SIFT';
+    namesFeat{3} = 'MSER-Affine';
+end
 excludeFigs = [6 9];
-ylimit = [25 0 5 0];
-plotResults(resultsPath,prefix,namesFeat,excludeFigs,ylimit);
+%ylimit = [25 0 4 0]; %sqi
+ylimit = [0 0 0 0];
+
+save([resultsPath prefix '.mat'],...
+  'repeatability','numCorresp','datasets','featExtractors','namesDataset','namesFeat',...
+  'repBenchmark','matchScore','numMatches',...
+  'Sieve','Type','Category','resultsPath','prefix','namesFeat','excludeFigs','ylimit',...
+  '-v7.3');
+
+plotResults([resultsPath prefix]);
 
 end
